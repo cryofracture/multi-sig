@@ -15,15 +15,13 @@ use casper_contract::unwrap_or_revert::UnwrapOrRevert;
 use casper_types::account::{AccountHash, ActionType, Weight};
 
 
-const RUNTIME_ARG_UPDATE_ASSOCIATED_KEY: &str = "associated_key";
-const RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT: &str = "new_weight";
+const RUNTIME_ARG_ASSOCIATED_KEY: &str = "associated_key";
+const RUNTIME_ARG_NEW_KEY_WEIGHT: &str = "new_weight";
 
 #[no_mangle]
 pub extern "C" fn call() {
+    let associated_account: AccountHash = runtime::get_named_arg(RUNTIME_ARG_ASSOCIATED_KEY);
+    let new_weight: u8 = runtime::get_named_arg(RUNTIME_ARG_NEW_KEY_WEIGHT);
 
-    let associated_account: AccountHash = runtime::get_named_arg("RUNTIME_ARG_UPDATE_ASSOCIATED_KEY");
-    let new_key_weight: u8 = runtime::get_named_arg("RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT");
-
-    account::update_associated_key(associated_account, Weight::new(new_key_weight)).unwrap_or_revert();
-
+    account::update_associated_key(associated_account, Weight::new(new_weight)).unwrap_or_revert();
 }

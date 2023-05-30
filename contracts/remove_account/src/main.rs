@@ -19,7 +19,7 @@ const RUNTIME_ARG_REMOVE_ASSOCIATED_KEY: &str = "remove_key";
 
 #[no_mangle]
 pub extern "C" fn call() {
-    let key_to_remove: AccountHash = runtime::get_named_arg("RUNTIME_ARG_REMOVE_ASSOCIATED_KEY");
+    let key_to_remove: AccountHash = runtime::get_named_arg(RUNTIME_ARG_REMOVE_ASSOCIATED_KEY);
 
     account::remove_associated_key(key_to_remove);
 }

@@ -19,8 +19,8 @@ const RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT: &str = "weight";
 
 #[no_mangle]
 pub extern "C" fn call() {
-    let new_associated_key: AccountHash = runtime::get_named_arg("RUNTIME_ARG_NEW_ASSOCIATED_KEY");
-    let new_key_weight: u8 = runtime::get_named_arg("RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT");
+    let new_associated_key: AccountHash = runtime::get_named_arg(RUNTIME_ARG_NEW_ASSOCIATED_KEY);
+    let new_key_weight: u8 = runtime::get_named_arg(RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT);
 
     account::add_associated_key(new_associated_key, Weight::new(new_key_weight)).unwrap_or_revert();
 
