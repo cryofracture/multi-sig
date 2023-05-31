@@ -16,7 +16,7 @@ use casper_contract::{
 };
 use casper_types::{ApiError, Key};
 
-const KEY_NAME: &str = "my-key-name";
+const RUNTIME_ARG_KEY_NAME: &str = "key_name";
 const RUNTIME_ARG_NAME: &str = "message";
 
 /// An error enum which can be converted to a `u16` so it can be returned as an `ApiError::User`.
@@ -34,8 +34,10 @@ impl From<Error> for ApiError {
 
 #[no_mangle]
 pub extern "C" fn call() {
+
+    let key_name: String = runtime::get_named_arg(RUNTIME_ARG_KEY_NAME);
     // The key shouldn't already exist in the named keys.
-    let missing_key = runtime::get_key(KEY_NAME);
+    let missing_key = runtime::get_key(&key_name);
     if missing_key.is_some() {
         runtime::revert(Error::KeyAlreadyExists);
     }
@@ -49,11 +51,11 @@ pub extern "C" fn call() {
 
     // Store the new `URef` as a named key with a name of `KEY_NAME`.
     let key = Key::URef(value_ref);
-    runtime::put_key(KEY_NAME, key);
+    runtime::put_key(&key_name, key);
 
     // The key should now be able to be retrieved.  Note that if `get_key()` returns `None`, then
     // `unwrap_or_revert()` will exit the process, returning `ApiError::None`.
-    let retrieved_key = runtime::get_key(KEY_NAME).unwrap_or_revert();
+    let retrieved_key = runtime::get_key(&key_name).unwrap_or_revert();
     if retrieved_key != key {
         runtime::revert(Error::KeyMismatch);
     }
