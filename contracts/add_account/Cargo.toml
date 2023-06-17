@@ -9,7 +9,7 @@ casper-types = "2.0.0"
 
 [[bin]]
 name = "add_account"
-path = "src/main.rs"
+path = "src/add_account.rs"
 bench = false
 doctest = false
 test = false
