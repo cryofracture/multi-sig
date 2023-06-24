@@ -64,9 +64,8 @@ mod tests {
             .commit();
 
         // Prepare assertions.
-        let account = builder
+        let binding = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
-            .unwrap()
             .associated_keys()
             .get(&DEFAULT_ACCOUNT_ADDR)
             .expect("Should have own account");
@@ -75,8 +74,8 @@ mod tests {
         // let actual_weight = account.associated_keys().get(&DEFAULT_ACCOUNT_ADDR);
         // let expected_weight: Weight::new<KEY_MANAGEMENT_WEIGHT>;
         // dbg!(actual_weight);
-
-        // assert_eq!(account, Some(&EXPECTED_KEY_WEIGHT));
+        dbg!(&account);
+        // assert_eq!(*account, Some(EXPECTED_KEY_WEIGHT));
         // let account_weight = account as u8;
         // assert!(account_weight == KEY_MANAGEMENT_WEIGHT);
     }
