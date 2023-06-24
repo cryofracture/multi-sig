@@ -1,4 +1,4 @@
-# Multi-Signature setup on Casper Network Accounts
+# Multi-signature Key Management on the Casper Network
 
 # Step 1: Clone and build multi-sig contracts
 
@@ -23,7 +23,8 @@ First, retrieve the account-hash of the key you are working with, via cspr.live 
 
 Once the account-hash is obtained, you can update the weight of the primary key by calling the update_keys contract:
 
-## FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+
 ```
 casper-client put-deploy --node-address https://rpc.testnet.casperlabs.io/ \
 --chain-name "casper-test" \
@@ -57,7 +58,8 @@ Which results in the main key now showing weight “3”:
 # Step 4: Update Thresholds
 After the primary key has had its weight increased, you can set the deployment and key_management thresholds for the account to set up a multi-sign environment. In order to add a new key to the account, call the add_account.wasm contract. The included contracts will set deployment threshold to 2(hard coded into the contract), and key_management to 3. It is recommended to have more weight on the account than is needed, by a small amount, to ensure you can meet key_management needs as necessary.
 
-## FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+
 ```
 casper-client put-deploy \
 --node-address https://rpc.testnet.casperlabs.io \
@@ -71,7 +73,8 @@ casper-client put-deploy \
 To add `account-hash-e2d00525cac31ae2756fb155f289d276c6945b6914923fe275de0cb127bffee7`, for example, to the account to set up multi-signature, you would issue a deploy command like:
 
 
-## FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+
 ```
 casper-client put-deploy --node-address https://rpc.testnet.casperlabs.io/ \
 --chain-name "casper-test" \
@@ -131,7 +134,7 @@ Assuming the below account structure:
 
 In this scenario, `account-hash-04a9691a9f8f05a0f08bd686f188b27c7dbcd644b415759fd3ca043d916ea02f` has become compromised and should no longer have write access to the account. To remove this account, call the remove_account.wasm with a command like:
 
-# FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
 
 ```
 casper-client put-deploy \
@@ -173,7 +176,7 @@ Which now returns an account without account-hash-04a96…ea02f:
 
 After all associated keys and action_thresholds have been set on the account to the desired points, you can self-deploy a contract call that will lower the weight of the original key back to 1, allowing proper multi-signature setup (again requiring 2 signatures to deploy, 3 weight for key_management). To lower the key’s weight, call the update_associated_keys.wasm contract again:
 
-## FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
 
 ```
 casper-client put-deploy \
@@ -218,7 +221,7 @@ After the action thresholds are set and keys are on the account in a way that wi
 
 To start signing a deploy, we will start with a simple “hello, world” named key contract.
 
-## FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
 
 ```
 casper-client make-deploy --chain-name casper-test \
@@ -229,9 +232,15 @@ casper-client make-deploy --chain-name casper-test \
 --session-arg "message:string='Hello, World'" \
 --output hello_world_one_signature
 ```
+<<<<<<< HEAD
 And then any associated key can sign the deploy to meet the action threshold for the account:
 
 ## FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+=======
+And then both associated keys can sign the deploy to meet the action threshold for the account:
+
+### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+>>>>>>> f9c32d416c787d70fcecd350e9f75b428f3ec08b
 
 ```
 casper-client sign-deploy -i hello_world_one_signature -k ~/cspr_nctl/user-2.pem -o hello_world_ready
@@ -256,7 +265,11 @@ Step 9: Set-up a multi-sign deploy from an associated key
 
 In order to initiate a deploy signature for a deploy against the primary account, the same steps for signing can be followed, but on the make-deploy command you must add the –session-account argument to tell the execution engine which account to run the contract against. The session-account requires a public key hex.
 
+<<<<<<< HEAD
 ## FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+=======
+### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+>>>>>>> f9c32d416c787d70fcecd350e9f75b428f3ec08b
 
 ```
 casper-client make-deploy --chain-name casper-test \
