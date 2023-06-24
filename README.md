@@ -82,7 +82,7 @@ casper-client put-deploy --node-address https://rpc.testnet.casperlabs.io/ \
 --session-arg "weight:u8='1'"
 ```
 NOTES:
-The key_management threshold cannot be changed before the deployment threshold can be changed,
+The deployment threshold cannot be changed before the key_management threshold can be changed,
 The primary key on the account can lower its weight by itself if it has enough weight to meet key_mangement.
 The above configuration assumes 3 keys to an account to manage keys, but only 2 to deploy against the account. The third pair and beyond should be kept incredibly secure to ensure robustness of the integrity of the account.
 
