@@ -38,6 +38,7 @@ mod tests {
     const DEPLOYMENT_WEIGHT: u8 = 2;
     const STD_KEY_WEIGHT: u8 = 1;
     const PRIMARY_KEY_NEW_WEIGHT: u8 = 0;
+    const KEY_WEIGHT: &str = "weight";
 
     #[test]
     fn should_update_primary_key_weight() {
@@ -64,12 +65,18 @@ mod tests {
         // Prepare assertions.
         let account = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
-            .expect("should have account");
-        let actual_weight = account.associated_keys().get(&DEFAULT_ACCOUNT_ADDR);
+            .expect("should have account")
+            .associated_keys()
+            // .get(&DEFAULT_ACCOUNT_ADDR)
+            .contains_key(&DEFAULT_ACCOUNT_ADDR);
+            // .get(KEY_WEIGHT);
+        // let actual_weight = account.associated_keys().get(&DEFAULT_ACCOUNT_ADDR);
         // let expected_weight: Weight::new<KEY_MANAGEMENT_WEIGHT>;
         // dbg!(actual_weight);
 
-        // assert!(actual_weight == expected_weight);
+        // assert_eq!(actual_weight, 3);
+        // let account_weight = account as u8;
+        // assert!(account_weight == KEY_MANAGEMENT_WEIGHT);
     }
 
     // #[test]
