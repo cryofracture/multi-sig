@@ -339,14 +339,6 @@ mod tests {
             .expect_success()
             .commit();
 
-        // Prepare assertions.
-        // let account = builder
-        //     .get_account(*DEFAULT_ACCOUNT_ADDR)
-        //     .expect("Should be an account.");
-        // let hello_world_string = account
-        //     .named_keys()
-        //     .get(&KEY_NAME);
-
         // make assertions
         let hello_world_string = builder
             .query(None, Key::Account(*DEFAULT_ACCOUNT_ADDR), &[KEY_NAME.to_string()])
