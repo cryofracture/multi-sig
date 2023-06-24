@@ -120,7 +120,7 @@ casper-client put-deploy --node-address https://rpc.testnet.casperlabs.io/ \
 
 ### NOTES
 
-1. The `deployment` threshold must be changed before the `key_management` threshold can be updated.
+1. The `key_management` threshold must be changed before the `deployment` threshold can be updated.
 2. The primary key on the account can lower its weight if it has enough weight to meet the `key_mangement` threshold.
 3. All associated keys should be kept incredibly secure to ensure the security and integrity of the account.
 

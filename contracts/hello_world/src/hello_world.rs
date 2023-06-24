@@ -17,7 +17,7 @@ use casper_contract::{
 use casper_types::{ApiError, Key};
 
 const RUNTIME_ARG_KEY_NAME: &str = "key_name";
-const RUNTIME_ARG_NAME: &str = "message";
+const RUNTIME_ARG_MESSAGE: &str = "message";
 
 /// An error enum which can be converted to a `u16` so it can be returned as an `ApiError::User`.
 #[repr(u16)]
@@ -44,7 +44,7 @@ pub extern "C" fn call() {
 
     // This contract expects a single runtime argument to be provided.  The arg is named "message"
     // and will be of type `String`.
-    let value: String = runtime::get_named_arg(RUNTIME_ARG_NAME);
+    let value: String = runtime::get_named_arg(RUNTIME_ARG_MESSAGE);
 
     // Store this value under a new unforgeable reference a.k.a `URef`.
     let value_ref = storage::new_uref(value);
