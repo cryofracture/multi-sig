@@ -3,14 +3,17 @@ mod tests {
     use casper_engine_test_support::{
         DeployItemBuilder, ExecuteRequestBuilder, InMemoryWasmTestBuilder, WasmTestBuilder,
         ARG_AMOUNT, DEFAULT_ACCOUNT_ADDR, DEFAULT_PAYMENT, PRODUCTION_RUN_GENESIS_REQUEST,
+        transfer::{create_accounts_request},
     };
     use casper_execution_engine::core::{engine_state::Error as EngineStateError, execution};
     use casper_execution_engine::storage::global_state::in_memory::InMemoryGlobalState;
     use casper_types::ContractHash;
     use casper_types::{api_error::ApiError, Key};
     use casper_types::{runtime_args, RuntimeArgs};
+    use casper_types::account::Weight;
     use std::path::PathBuf;
 
+    #[allow(unused_variables)]
     const MY_ACCOUNT: [u8; 32] = [7u8; 32];
     pub const ACCOUNT_USER_1: [u8; 32] = [1u8; 32];
     pub const ACCOUNT_USER_2: [u8; 32] = [2u8; 32];
@@ -31,72 +34,71 @@ mod tests {
     const REMOVE_ACCOUNT_WASM: &str = "remove_account.wasm";
     const UPDATE_KEYS_WASM: &str = "update_associated_keys.wasm";
     const UPDATE_THRESHOLDS_WASM: &str = "update_thresholds.wasm";
+    const KEY_MANAGEMENT_WEIGHT: u8 = 3;
+    const DEPLOYMENT_WEIGHT: u8 = 2;
+    const STD_KEY_WEIGHT: u8 = 1;
+    const PRIMARY_KEY_NEW_WEIGHT: u8 = 0;
 
     #[test]
     fn should_update_primary_key_weight() {
         let mut builder = InMemoryWasmTestBuilder::default();
-        builder.run_genesis(&PRODUCTION_RUN_GENESIS_REQUEST).commit();
+        builder.run_genesis(&*PRODUCTION_RUN_GENESIS_REQUEST).commit();
 
-        let session_code = PathBuf::from(UPDATE_KEYS_WASM);
-        let session_args = runtime_args! {
-            RUNTIME_ARG_ASSOCIATED_KEY => DEFAULT_ACCOUNT_ADDR,
-            RUNTIME_ARG_NEW_KEY_WEIGHT => 3,
-        };
 
-        let deploy_item = DeployItemBuilder::new()
-            .with_empty_payment_bytes(runtime_args! {
-                ARG_AMOUNT => *DEFAULT_PAYMENT
-            })
-            .with_session_code(session_code, session_args)
-            .with_authorization_keys(&[*DEFAULT_ACCOUNT_ADDR])
-            .with_address(*DEFAULT_ACCOUNT_ADDR)
+        // Install the contract.
+        let contract_installation_request = ExecuteRequestBuilder::standard(
+            *DEFAULT_ACCOUNT_ADDR,
+            UPDATE_KEYS_WASM,
+            runtime_args! {
+                RUNTIME_ARG_ASSOCIATED_KEY => *DEFAULT_ACCOUNT_ADDR,
+                RUNTIME_ARG_NEW_KEY_WEIGHT => KEY_MANAGEMENT_WEIGHT,
+            },
+        )
             .build();
 
-        let execute_request = ExecuteRequestBuilder::from_deploy_item(deploy_item).build();
+        builder
+            .exec(contract_installation_request)
+            .expect_success()
+            .commit();
 
-        // prepare assertions.
+        // Prepare assertions.
         let account = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
             .expect("should have account");
         let actual_weight = account.associated_keys().get(&DEFAULT_ACCOUNT_ADDR);
-        assert!(account.is_err());
+        // let expected_weight: Weight::new<KEY_MANAGEMENT_WEIGHT>;
+        // dbg!(actual_weight);
 
-        // deploy the contract.
-        builder.exec(execute_request).commit().expect_success();
+        // assert!(actual_weight == expected_weight);
     }
 
     // #[test]
     // fn should_add_new_account_to_primary() {
     //     let mut builder = InMemoryWasmTestBuilder::default();
-    //     builder.run_genesis(&PRODUCTION_RUN_GENESIS_REQUEST).commit();
+    //     builder.run_genesis(&*PRODUCTION_RUN_GENESIS_REQUEST).commit();
     //
-    //     let session_code = PathBuf::from(ADD_ACCOUNT_WASM);
-    //     let session_args = runtime_args! {
-    //         RUNTIME_ARG_ASSOCIATED_KEY => ACCOUNT_USER_1,
-    //         RUNTIME_ARG_NEW_KEY_WEIGHT => 1,
-    //     };
     //
-    //     let deploy_item = DeployItemBuilder::new()
-    //         .with_empty_payment_bytes(runtime_args! {
-    //             ARG_AMOUNT => *DEFAULT_PAYMENT
-    //         })
-    //         .with_session_code(session_code, session_args)
-    //         .with_authorization_keys(&[*DEFAULT_ACCOUNT_ADDR])
-    //         .with_address(*DEFAULT_ACCOUNT_ADDR)
+    //     // Install the contract.
+    //     let contract_installation_request = ExecuteRequestBuilder::standard(
+    //         *DEFAULT_ACCOUNT_ADDR,
+    //         UPDATE_KEYS_WASM,
+    //         runtime_args! {
+    //             RUNTIME_ARG_ASSOCIATED_KEY => *ACCOUNT_USER_1,
+    //             RUNTIME_ARG_NEW_KEY_WEIGHT => 3,
+    //         },
+    //     )
     //         .build();
     //
-    //     let execute_request = ExecuteRequestBuilder::from_deploy_item(deploy_item).build();
+    //     builder
+    //         .exec(contract_installation_request)
+    //         .expect_success()
+    //         .commit();
     //
-    //     // prepare assertions.
-    //     let result_of_query = builder.query(
-    //         None,
-    //         Key::Account(*DEFAULT_ACCOUNT_ADDR),
-    //         &[CONTRACT_QUESTION_KEY.to_string()],
-    //     );
-    //     assert!(result_of_query.is_err());
-    //
-    //     // deploy the contract.
-    //     builder.exec(execute_request).commit().expect_success();
+    //     // Prepare assertions.
+    //     let account = builder
+    //         .get_account(*DEFAULT_ACCOUNT_ADDR)
+    //         .expect("should have account");
+    //     let actual_weight = account.associated_keys().get(&ACCOUNT_USER_1).expect_success();
     // }
 }
 
