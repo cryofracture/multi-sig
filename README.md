@@ -82,6 +82,7 @@ Set up a multi-signature scheme for the account, by updating the `deployment` an
 
 ### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
 
+
 ```bash
 casper-client put-deploy \
 --node-address https://rpc.testnet.casperlabs.io \
@@ -407,6 +408,15 @@ casper-client make-deploy --chain-name casper-test \
 
 The second and third associated keys sign the deploy with `sign-deploy` to meet the key management threshold for the account.
 
+And then both associated keys can sign the deploy to meet the action threshold for the account:
+
+### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
+
+```
+casper-client sign-deploy -i hello_world_one_signature -k ~/cspr_nctl/user-2.pem -o hello_world_ready
+```
+And you can now send the deploy to the network:
+
 ```bash
 casper-client sign-deploy -i remove_account_one_signature -k ~/cspr_nctl/user-2.pem -o remove_account_two_signatures
 casper-client sign-deploy -i remove_account_two_signatures -k ~/cspr_nctl/user-3.pem -o remove_account_three_signatures
@@ -422,6 +432,7 @@ The resulting account should not contain the associated key that was removed.
 
 <details>
 <summary>Account details</summary>
+### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
 
 ```json
 "Account": {
