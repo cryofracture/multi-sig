@@ -7,7 +7,7 @@ mod tests {
         ExecuteRequestBuilder, InMemoryWasmTestBuilder, DEFAULT_ACCOUNT_ADDR,
         PRODUCTION_RUN_GENESIS_REQUEST,
     };
-    use casper_types::{runtime_args, RuntimeArgs};
+    use casper_types::{account::Weight, runtime_args, RuntimeArgs};
     use remove_account::constants::RUNTIME_ARG_REMOVE_ASSOCIATED_KEY;
     use tests::constants::{
         ADD_ACCOUNT_WASM, DEPLOYMENT_THRESHOLD, DEPLOYMENT_WEIGHT, EXPECTED_KEY_WEIGHT,
@@ -28,13 +28,15 @@ mod tests {
             .run_genesis(&PRODUCTION_RUN_GENESIS_REQUEST)
             .commit();
 
+        let expected_key_weight = Weight::new(3);
+
         // Install the contract.
         let contract_installation_request = ExecuteRequestBuilder::standard(
             *DEFAULT_ACCOUNT_ADDR,
             UPDATE_KEYS_WASM,
             runtime_args! {
                 RUNTIME_ARG_ASSOCIATED_KEY => *DEFAULT_ACCOUNT_ADDR,
-                RUNTIME_ARG_NEW_KEY_WEIGHT => EXPECTED_KEY_WEIGHT,
+                RUNTIME_ARG_NEW_KEY_WEIGHT => expected_key_weight,
             },
         )
         .build();
@@ -53,7 +55,7 @@ mod tests {
             .get(&DEFAULT_ACCOUNT_ADDR)
             .unwrap();
 
-        assert_eq!(actual_weight, &EXPECTED_KEY_WEIGHT);
+        assert_eq!(actual_weight, &expected_key_weight);
     }
 
     #[test]
@@ -280,7 +282,6 @@ mod tests {
             .get_account(*DEFAULT_ACCOUNT_ADDR)
             .expect("Should be an account.");
 
-        // TODO missing_account ?
         let missing_account_weight = account.associated_keys().get(&USER_1_ACCOUNT);
 
         assert_eq!(missing_account_weight, None);
