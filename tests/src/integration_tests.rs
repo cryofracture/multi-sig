@@ -48,12 +48,16 @@ mod tests {
         let account = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
             .expect("Should be an account.");
-        let actual_weight = account.associated_keys().get(&DEFAULT_ACCOUNT_ADDR);
-        assert_eq!(actual_weight, Some(&EXPECTED_KEY_WEIGHT));
+        let actual_weight = account
+            .associated_keys()
+            .get(&DEFAULT_ACCOUNT_ADDR)
+            .unwrap();
+
+        assert_eq!(actual_weight, &EXPECTED_KEY_WEIGHT);
     }
 
     #[test]
-    fn should_add_new_accounts_to_primary() {
+    fn should_add_new_accounts_to_primary_associated_keys() {
         let mut builder = InMemoryWasmTestBuilder::default();
         builder
             .run_genesis(&PRODUCTION_RUN_GENESIS_REQUEST)
@@ -79,8 +83,9 @@ mod tests {
         let account = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
             .expect("Should be an account.");
-        let actual_weight = account.associated_keys().get(&USER_1_ACCOUNT);
-        assert_eq!(actual_weight, Some(&DEPLOYMENT_WEIGHT));
+        let actual_weight = account.associated_keys().get(&USER_1_ACCOUNT).unwrap();
+
+        assert_eq!(actual_weight, &DEPLOYMENT_WEIGHT);
 
         // Add User Account 2 to the Default Account Associated Keys
         let contract_installation_request = ExecuteRequestBuilder::standard(
@@ -102,8 +107,9 @@ mod tests {
         let account = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
             .expect("Should be an account.");
-        let actual_weight = account.associated_keys().get(&USER_2_ACCOUNT);
-        assert_eq!(actual_weight, Some(&DEPLOYMENT_WEIGHT));
+        let actual_weight = account.associated_keys().get(&USER_2_ACCOUNT).unwrap();
+
+        assert_eq!(actual_weight, &DEPLOYMENT_WEIGHT);
 
         // Add User Account 3 to the Default Account Associated Keys
         let contract_installation_request = ExecuteRequestBuilder::standard(
@@ -125,8 +131,9 @@ mod tests {
         let account = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
             .expect("Should be an account.");
-        let actual_weight = account.associated_keys().get(&USER_3_ACCOUNT);
-        assert_eq!(actual_weight, Some(&DEPLOYMENT_WEIGHT));
+        let actual_weight = account.associated_keys().get(&USER_3_ACCOUNT).unwrap();
+
+        assert_eq!(actual_weight, &DEPLOYMENT_WEIGHT);
 
         // Add User Account 4 to the Default Account Associated Keys
         let contract_installation_request = ExecuteRequestBuilder::standard(
@@ -148,8 +155,9 @@ mod tests {
         let account = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
             .expect("Should be an account.");
-        let actual_weight = account.associated_keys().get(&USER_4_ACCOUNT);
-        assert_eq!(actual_weight, Some(&DEPLOYMENT_WEIGHT));
+        let actual_weight = account.associated_keys().get(&USER_4_ACCOUNT).unwrap();
+
+        assert_eq!(actual_weight, &DEPLOYMENT_WEIGHT);
     }
 
     #[test]
@@ -179,8 +187,11 @@ mod tests {
         let account = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
             .expect("Should be an account.");
-        let actual_weight = account.associated_keys().get(&DEFAULT_ACCOUNT_ADDR);
-        assert_eq!(actual_weight, Some(&EXPECTED_KEY_WEIGHT));
+        let actual_weight = account
+            .associated_keys()
+            .get(&DEFAULT_ACCOUNT_ADDR)
+            .unwrap();
+        assert_eq!(actual_weight, &EXPECTED_KEY_WEIGHT);
 
         // Install the contract.
         let contract_installation_request = ExecuteRequestBuilder::standard(
@@ -202,11 +213,12 @@ mod tests {
         let account = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
             .expect("Should be an account.");
+
         let key_mgmt_threshold = account.action_thresholds().key_management();
-        // dbg!(key_mgmt_threshold);
         let deployment_threshold = account.action_thresholds().deployment();
-        assert_eq!(Some(key_mgmt_threshold), Some(&KEY_MGMT_THRESHOLD));
-        assert_eq!(Some(deployment_threshold), Some(&DEPLOYMENT_THRESHOLD));
+
+        assert_eq!(key_mgmt_threshold, &KEY_MGMT_THRESHOLD);
+        assert_eq!(deployment_threshold, &DEPLOYMENT_THRESHOLD);
     }
 
     #[test]
@@ -248,7 +260,7 @@ mod tests {
             .expect_success()
             .commit();
 
-        // Add User Account 1 to the Default Account Associated Keys
+        // Remove User Account 1 to the Default Account Associated Keys
         let contract_installation_request = ExecuteRequestBuilder::standard(
             *DEFAULT_ACCOUNT_ADDR,
             REMOVE_ACCOUNT_WASM,
@@ -269,11 +281,13 @@ mod tests {
             .expect("Should be an account.");
 
         // TODO missing_account ?
-        let _missing_account = account.associated_keys().get(&USER_1_ACCOUNT);
+        let missing_account_weight = account.associated_keys().get(&USER_1_ACCOUNT);
 
-        let existing_account = account.associated_keys().get(&USER_2_ACCOUNT);
+        assert_eq!(missing_account_weight, None);
 
-        assert_eq!(existing_account, Some(&DEPLOYMENT_WEIGHT));
+        let existing_account_weight = account.associated_keys().get(&USER_2_ACCOUNT).unwrap();
+
+        assert_eq!(existing_account_weight, &DEPLOYMENT_WEIGHT);
     }
 }
 
