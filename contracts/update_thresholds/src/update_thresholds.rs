@@ -7,9 +7,9 @@ compile_error!("target arch should be wasm32: compile with '--target wasm32-unkn
 use casper_contract::contract_api::{account, runtime};
 use casper_contract::unwrap_or_revert::UnwrapOrRevert;
 use casper_types::account::{ActionType, Weight};
-
-const RUNTIME_ARG_NEW_DEPLOYMENT_THRESHOLD: &str = "deployment_threshold";
-const RUNTIME_ARG_NEW_KEY_MANAGEMENT_THRESHOLD: &str = "key_management_threshold";
+use update_thresholds::constants::{
+    RUNTIME_ARG_NEW_DEPLOYMENT_THRESHOLD, RUNTIME_ARG_NEW_KEY_MANAGEMENT_THRESHOLD,
+};
 
 #[no_mangle]
 pub extern "C" fn call() {

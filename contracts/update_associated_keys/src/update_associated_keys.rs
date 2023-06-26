@@ -7,9 +7,7 @@ compile_error!("target arch should be wasm32: compile with '--target wasm32-unkn
 use casper_contract::contract_api::{account, runtime};
 use casper_contract::unwrap_or_revert::UnwrapOrRevert;
 use casper_types::account::{AccountHash, Weight};
-
-const RUNTIME_ARG_ASSOCIATED_KEY: &str = "associated_key";
-const RUNTIME_ARG_NEW_KEY_WEIGHT: &str = "new_weight";
+use update_associated_keys::constants::{RUNTIME_ARG_ASSOCIATED_KEY, RUNTIME_ARG_NEW_KEY_WEIGHT};
 
 #[no_mangle]
 pub extern "C" fn call() {

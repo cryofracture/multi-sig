@@ -21,10 +21,10 @@ test: build-contracts
 	cd tests && cargo test
 
 clippy:
-	cd contracts/add_account && cargo clippy --all-targets -- -D warnings
-	cd contracts/remove_account && cargo clippy --all-targets -- -D warnings
-	cd contracts/update_associated_keys && cargo clippy --all-targets -- -D warnings
-	cd contracts/update_thresholds && cargo clippy --all-targets -- -D warnings
+	cd contracts/add_account && cargo clippy --target wasm32-unknown-unknown --bins -- -D warnings
+	cd contracts/remove_account && cargo clippy --target wasm32-unknown-unknown --bins -- -D warnings
+	cd contracts/update_associated_keys && cargo clippy --target wasm32-unknown-unknown --bins -- -D warnings
+	cd contracts/update_thresholds && cargo clippy --target wasm32-unknown-unknown --bins -- -D warnings
 	cd tests && cargo clippy --all-targets -- -D warnings
 
 check-lint: clippy

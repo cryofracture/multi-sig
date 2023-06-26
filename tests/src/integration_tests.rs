@@ -1,37 +1,25 @@
 #[cfg(test)]
 mod tests {
+    use add_account::constants::{
+        RUNTIME_ARG_NEW_ASSOCIATED_KEY, RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT,
+    };
     use casper_engine_test_support::{
         ExecuteRequestBuilder, InMemoryWasmTestBuilder, DEFAULT_ACCOUNT_ADDR,
         PRODUCTION_RUN_GENESIS_REQUEST,
     };
-    use casper_types::account::{AccountHash, Weight};
     use casper_types::{runtime_args, RuntimeArgs};
-
-    #[allow(unused_variables)]
-    pub const USER_1_ACCOUNT: [u8; 32] = [1u8; 32];
-    pub const USER_1_ACCOUNT_HASH: AccountHash = AccountHash::new(USER_1_ACCOUNT);
-    pub const USER_2_ACCOUNT: [u8; 32] = [2u8; 32];
-    pub const USER_2_ACCOUNT_HASH: AccountHash = AccountHash::new(USER_2_ACCOUNT);
-    pub const USER_3_ACCOUNT: [u8; 32] = [3u8; 32];
-    pub const USER_3_ACCOUNT_HASH: AccountHash = AccountHash::new(USER_3_ACCOUNT);
-    pub const USER_4_ACCOUNT: [u8; 32] = [4u8; 32];
-    pub const USER_4_ACCOUNT_HASH: AccountHash = AccountHash::new(USER_4_ACCOUNT);
-    // Define `KEY` constant to match that in the contract.
-    const RUNTIME_ARG_NEW_ASSOCIATED_KEY: &str = "new_key";
-    const RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT: &str = "weight";
-    const RUNTIME_ARG_REMOVE_ASSOCIATED_KEY: &str = "remove_key";
-    const RUNTIME_ARG_ASSOCIATED_KEY: &str = "associated_key";
-    const RUNTIME_ARG_NEW_KEY_WEIGHT: &str = "new_weight";
-    const RUNTIME_ARG_NEW_DEPLOYMENT_THRESHOLD: &str = "deployment_threshold";
-    const RUNTIME_ARG_NEW_KEY_MANAGEMENT_THRESHOLD: &str = "key_management_threshold";
-    const ADD_ACCOUNT_WASM: &str = "add_account.wasm";
-    const REMOVE_ACCOUNT_WASM: &str = "remove_account.wasm";
-    const UPDATE_KEYS_WASM: &str = "update_associated_keys.wasm";
-    const UPDATE_THRESHOLDS_WASM: &str = "update_thresholds.wasm";
-    const EXPECTED_KEY_WEIGHT: Weight = Weight::new(3);
-    const DEPLOYMENT_WEIGHT: Weight = Weight::new(1);
-    const DEPLOYMENT_THRESHOLD: Weight = Weight::new(2);
-    const KEY_MGMT_THRESHOLD: Weight = Weight::new(3);
+    use remove_account::constants::RUNTIME_ARG_REMOVE_ASSOCIATED_KEY;
+    use tests::constants::{
+        ADD_ACCOUNT_WASM, DEPLOYMENT_THRESHOLD, DEPLOYMENT_WEIGHT, EXPECTED_KEY_WEIGHT,
+        KEY_MGMT_THRESHOLD, REMOVE_ACCOUNT_WASM, UPDATE_KEYS_WASM, UPDATE_THRESHOLDS_WASM,
+        USER_1_ACCOUNT, USER_2_ACCOUNT, USER_3_ACCOUNT, USER_4_ACCOUNT,
+    };
+    use update_associated_keys::constants::{
+        RUNTIME_ARG_ASSOCIATED_KEY, RUNTIME_ARG_NEW_KEY_WEIGHT,
+    };
+    use update_thresholds::constants::{
+        RUNTIME_ARG_NEW_DEPLOYMENT_THRESHOLD, RUNTIME_ARG_NEW_KEY_MANAGEMENT_THRESHOLD,
+    };
 
     #[test]
     fn should_update_primary_key_weight() {
@@ -76,7 +64,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             ADD_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_1_ACCOUNT_HASH,
+                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_1_ACCOUNT,
                 RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT => DEPLOYMENT_WEIGHT,
             },
         )
@@ -91,7 +79,7 @@ mod tests {
         let account = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
             .expect("Should be an account.");
-        let actual_weight = account.associated_keys().get(&USER_1_ACCOUNT_HASH);
+        let actual_weight = account.associated_keys().get(&USER_1_ACCOUNT);
         assert_eq!(actual_weight, Some(&DEPLOYMENT_WEIGHT));
 
         // Add User Account 2 to the Default Account Associated Keys
@@ -99,7 +87,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             ADD_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_2_ACCOUNT_HASH,
+                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_2_ACCOUNT,
                 RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT => DEPLOYMENT_WEIGHT,
             },
         )
@@ -114,7 +102,7 @@ mod tests {
         let account = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
             .expect("Should be an account.");
-        let actual_weight = account.associated_keys().get(&USER_2_ACCOUNT_HASH);
+        let actual_weight = account.associated_keys().get(&USER_2_ACCOUNT);
         assert_eq!(actual_weight, Some(&DEPLOYMENT_WEIGHT));
 
         // Add User Account 3 to the Default Account Associated Keys
@@ -122,7 +110,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             ADD_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_3_ACCOUNT_HASH,
+                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_3_ACCOUNT,
                 RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT => DEPLOYMENT_WEIGHT,
             },
         )
@@ -137,7 +125,7 @@ mod tests {
         let account = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
             .expect("Should be an account.");
-        let actual_weight = account.associated_keys().get(&USER_3_ACCOUNT_HASH);
+        let actual_weight = account.associated_keys().get(&USER_3_ACCOUNT);
         assert_eq!(actual_weight, Some(&DEPLOYMENT_WEIGHT));
 
         // Add User Account 4 to the Default Account Associated Keys
@@ -145,7 +133,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             ADD_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_4_ACCOUNT_HASH,
+                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_4_ACCOUNT,
                 RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT => DEPLOYMENT_WEIGHT,
             },
         )
@@ -160,7 +148,7 @@ mod tests {
         let account = builder
             .get_account(*DEFAULT_ACCOUNT_ADDR)
             .expect("Should be an account.");
-        let actual_weight = account.associated_keys().get(&USER_4_ACCOUNT_HASH);
+        let actual_weight = account.associated_keys().get(&USER_4_ACCOUNT);
         assert_eq!(actual_weight, Some(&DEPLOYMENT_WEIGHT));
     }
 
@@ -233,7 +221,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             ADD_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_1_ACCOUNT_HASH,
+                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_1_ACCOUNT,
                 RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT => DEPLOYMENT_WEIGHT,
             },
         )
@@ -249,7 +237,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             ADD_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_2_ACCOUNT_HASH,
+                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_2_ACCOUNT,
                 RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT => DEPLOYMENT_WEIGHT,
             },
         )
@@ -265,7 +253,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             REMOVE_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_REMOVE_ASSOCIATED_KEY => USER_1_ACCOUNT_HASH,
+                RUNTIME_ARG_REMOVE_ASSOCIATED_KEY => USER_1_ACCOUNT,
             },
         )
         .build();
@@ -281,9 +269,9 @@ mod tests {
             .expect("Should be an account.");
 
         // TODO missing_account ?
-        let _missing_account = account.associated_keys().get(&USER_1_ACCOUNT_HASH);
+        let _missing_account = account.associated_keys().get(&USER_1_ACCOUNT);
 
-        let existing_account = account.associated_keys().get(&USER_2_ACCOUNT_HASH);
+        let existing_account = account.associated_keys().get(&USER_2_ACCOUNT);
 
         assert_eq!(existing_account, Some(&DEPLOYMENT_WEIGHT));
     }

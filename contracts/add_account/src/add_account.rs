@@ -4,12 +4,12 @@
 #[cfg(not(target_arch = "wasm32"))]
 compile_error!("target arch should be wasm32: compile with '--target wasm32-unknown-unknown'");
 
+use add_account::constants::{
+    RUNTIME_ARG_NEW_ASSOCIATED_KEY, RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT,
+};
 use casper_contract::contract_api::{account, runtime};
 use casper_contract::unwrap_or_revert::UnwrapOrRevert;
 use casper_types::account::{AccountHash, Weight};
-
-const RUNTIME_ARG_NEW_ASSOCIATED_KEY: &str = "new_key";
-const RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT: &str = "weight";
 
 #[no_mangle]
 pub extern "C" fn call() {

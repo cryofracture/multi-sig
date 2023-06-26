@@ -6,8 +6,7 @@ compile_error!("target arch should be wasm32: compile with '--target wasm32-unkn
 
 use casper_contract::contract_api::{account, runtime};
 use casper_types::account::AccountHash;
-
-const RUNTIME_ARG_REMOVE_ASSOCIATED_KEY: &str = "remove_key";
+use remove_account::constants::RUNTIME_ARG_REMOVE_ASSOCIATED_KEY;
 
 #[no_mangle]
 pub extern "C" fn call() {
