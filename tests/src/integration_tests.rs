@@ -267,7 +267,8 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             REMOVE_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_REMOVE_ASSOCIATED_KEY => Key::from(USER_1_ACCOUNT),
+                RUNTIME_ARG_REMOVE_ASSOCIATED_KEY => Key::from(USER_1_ACCOUNT)
+                ,
             },
         )
         .build();
