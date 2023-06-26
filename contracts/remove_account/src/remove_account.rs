@@ -5,12 +5,13 @@
 compile_error!("target arch should be wasm32: compile with '--target wasm32-unknown-unknown'");
 
 use casper_contract::contract_api::{account, runtime};
-use casper_types::account::AccountHash;
+use casper_types::Key;
 use remove_account::constants::RUNTIME_ARG_REMOVE_ASSOCIATED_KEY;
 
 #[no_mangle]
 pub extern "C" fn call() {
-    let key_to_remove: AccountHash = runtime::get_named_arg(RUNTIME_ARG_REMOVE_ASSOCIATED_KEY);
-
-    let _ret = account::remove_associated_key(key_to_remove);
+    let key_to_remove: Key = runtime::get_named_arg(RUNTIME_ARG_REMOVE_ASSOCIATED_KEY);
+    if let Key::Account(account) = key_to_remove {
+        let _ret = account::remove_associated_key(account);
+    }
 }

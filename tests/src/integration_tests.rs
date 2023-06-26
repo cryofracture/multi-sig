@@ -7,7 +7,7 @@ mod tests {
         ExecuteRequestBuilder, InMemoryWasmTestBuilder, DEFAULT_ACCOUNT_ADDR,
         PRODUCTION_RUN_GENESIS_REQUEST,
     };
-    use casper_types::{account::Weight, runtime_args, RuntimeArgs};
+    use casper_types::{account::Weight, runtime_args, Key, RuntimeArgs};
     use remove_account::constants::RUNTIME_ARG_REMOVE_ASSOCIATED_KEY;
     use tests::constants::{
         ADD_ACCOUNT_WASM, DEPLOYMENT_THRESHOLD, DEPLOYMENT_WEIGHT, EXPECTED_KEY_WEIGHT,
@@ -35,7 +35,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             UPDATE_KEYS_WASM,
             runtime_args! {
-                RUNTIME_ARG_ASSOCIATED_KEY => *DEFAULT_ACCOUNT_ADDR,
+                RUNTIME_ARG_ASSOCIATED_KEY => Key::from(*DEFAULT_ACCOUNT_ADDR),
                 RUNTIME_ARG_NEW_KEY_WEIGHT => expected_key_weight,
             },
         )
@@ -70,7 +70,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             ADD_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_1_ACCOUNT,
+                RUNTIME_ARG_NEW_ASSOCIATED_KEY => Key::from(USER_1_ACCOUNT),
                 RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT => DEPLOYMENT_WEIGHT,
             },
         )
@@ -94,7 +94,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             ADD_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_2_ACCOUNT,
+                RUNTIME_ARG_NEW_ASSOCIATED_KEY => Key::from(USER_2_ACCOUNT),
                 RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT => DEPLOYMENT_WEIGHT,
             },
         )
@@ -118,7 +118,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             ADD_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_3_ACCOUNT,
+                RUNTIME_ARG_NEW_ASSOCIATED_KEY => Key::from(USER_3_ACCOUNT),
                 RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT => DEPLOYMENT_WEIGHT,
             },
         )
@@ -142,7 +142,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             ADD_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_4_ACCOUNT,
+                RUNTIME_ARG_NEW_ASSOCIATED_KEY => Key::from(USER_4_ACCOUNT),
                 RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT => DEPLOYMENT_WEIGHT,
             },
         )
@@ -174,7 +174,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             UPDATE_KEYS_WASM,
             runtime_args! {
-                RUNTIME_ARG_ASSOCIATED_KEY => *DEFAULT_ACCOUNT_ADDR,
+                RUNTIME_ARG_ASSOCIATED_KEY => Key::from(*DEFAULT_ACCOUNT_ADDR),
                 RUNTIME_ARG_NEW_KEY_WEIGHT => EXPECTED_KEY_WEIGHT,
             },
         )
@@ -235,7 +235,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             ADD_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_1_ACCOUNT,
+                RUNTIME_ARG_NEW_ASSOCIATED_KEY => Key::from(USER_1_ACCOUNT),
                 RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT => DEPLOYMENT_WEIGHT,
             },
         )
@@ -251,7 +251,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             ADD_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_NEW_ASSOCIATED_KEY => USER_2_ACCOUNT,
+                RUNTIME_ARG_NEW_ASSOCIATED_KEY => Key::from(USER_2_ACCOUNT),
                 RUNTIME_ARG_NEW_ASSOCIATED_KEY_WEIGHT => DEPLOYMENT_WEIGHT,
             },
         )
@@ -267,7 +267,7 @@ mod tests {
             *DEFAULT_ACCOUNT_ADDR,
             REMOVE_ACCOUNT_WASM,
             runtime_args! {
-                RUNTIME_ARG_REMOVE_ASSOCIATED_KEY => USER_1_ACCOUNT,
+                RUNTIME_ARG_REMOVE_ASSOCIATED_KEY => Key::from(USER_1_ACCOUNT),
             },
         )
         .build();
