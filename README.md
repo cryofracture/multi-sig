@@ -267,11 +267,11 @@ The `hello_world.wasm` will run and add a named key to the account.
 
 ## Step 8: Remove a key from the account
 
-This example shows how to remove a key from the account if it becomes compromised. The example adds a fourth associated key with `account-hash-77ea2e433c94c9cb8303942335da458672249d38c1fa5d1d7a7500b862ff52a4`, and then removes it using the `remove_account.wasm` session code.
+This example adds a fourth associated key with `account-hash-77ea2e433c94c9cb8303942335da458672249d38c1fa5d1d7a7500b862ff52a4`, and then removes it using the `remove_account.wasm` session code. The goal is to show how to remove a key that may have been compromised.
 
-If you remove one of the existing keys without adding the fourth associated key, the account will become unusable since none of the remaining keys will meet the required weight for key management. Thus, changing weights or adding new associated keys would be impossible.
+>**Caution**: If you remove one of the existing keys without adding the fourth associated key, the account will become unusable since none of the remaining keys will meet the required weight for key management. Changing weights or adding new associated keys would become impossible.
 
->**Remove keys with caution! Do not run this example on Mainnet.**
+### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
 
 Given the current setup, three associated keys need to sign the deploy to add a fourth associated key. One associated key creates and signs the deploy with the `make-deploy` command.
 
@@ -292,7 +292,7 @@ casper-client sign-deploy -i add_account_one_signature -k ~/cspr_nctl/user-2.pem
 casper-client sign-deploy -i add_account_two_signatures -k ~/cspr_nctl/user-3.pem -o add_account_three_signatures
 ```
 
-The deploy containing the `add_account.wasm` will add a new associated account with weight 1.
+Send the deploy containing the `add_account.wasm` to add a new associated account with weight 1.
 
 ```bash
 casper-client send-deploy --node-address https://rpc.testnet.casperlabs.io -i add_account_three_signatures
@@ -341,7 +341,9 @@ The account should now have four associated keys with weight 1 and the primary k
 
 The `remove_account.wasm` will remove the newly added account to demonstrate the possibility of removing associated keys that may have been compromised. This deploy needs to be signed by three associated keys to meet the key management threshold.
 
-Given the current setup, three associated keys need to sign the deploy to add a fourth associated key. One associated key creates and signs the deploy with the `make-deploy` command.
+One associated key creates and signs the deploy with the `make-deploy` command.
+
+### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
 
 ```bash
 casper-client make-deploy --chain-name casper-test \
@@ -355,27 +357,20 @@ casper-client make-deploy --chain-name casper-test \
 
 The second and third associated keys sign the deploy with `sign-deploy` to meet the key management threshold for the account.
 
-And then both associated keys can sign the deploy to meet the action threshold for the account:
-
-### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
-
-```
-casper-client sign-deploy -i hello_world_one_signature -k ~/cspr_nctl/user-2.pem -o hello_world_ready
-```
-And you can now send the deploy to the network:
-
 ```bash
 casper-client sign-deploy -i remove_account_one_signature -k ~/cspr_nctl/user-2.pem -o remove_account_two_signatures
 casper-client sign-deploy -i remove_account_two_signatures -k ~/cspr_nctl/user-3.pem -o remove_account_three_signatures
 ```
 
-The deploy containing the `add_account.wasm` will add a new associated account with weight 1.
+Send the deploy to the network to remove an associated key.
+
+### REMOVE KEYS WITH CAUTION! DO NOT RUN THIS EXAMPLE ON MAINNET
 
 ```bash
 casper-client send-deploy --node-address https://rpc.testnet.casperlabs.io -i remove_account_three_signatures
 ```
 
-The resulting account should not contain the associated key that was removed.
+The resulting account should not contain the associated key that you just removed.
 
 <details>
 <summary>Account details</summary>
