@@ -190,7 +190,7 @@ After setting up the account with a multi-signature scheme, use the following co
 2. `sign-deploy` - adds additional signatures for a multi-signature deploy
 3. `send-deploy` - sends the deploy to the network
 
-The following example sends a multi-sig deploy containing Wasm (`hello_world.wasm`) that adds a named key to the account. The deploy originates from the primary account and needs two signatures to meet the `deployment` weight set to 2. Once both keys sign the deploy, either can send it to the network.
+The following example sends a multi-sig deploy containing Wasm (`hello_world.wasm`) that adds a named key to the account. The deploy originates from the primary account and needs two signatures to meet the `deployment` weight set to 2. Once both keys sign the deploy, either can send it to the network. The Wasm used here can be found in the [hello-world](https://github.com/casper-ecosystem/hello-world) repository.
 
 ### FOR EXAMPLE ONLY, PLEASE UPDATE PRIOR TO EXECUTING
 
