@@ -180,7 +180,7 @@ The account would now have one primary key with weight 3, and three associated a
 1. The `deployment` threshold must be changed before the `key_management` threshold can be updated.
 2. The primary key on the account can lower its weight if it has enough weight to meet the `key_mangement` threshold.
 3. All associated keys should be kept incredibly secure to ensure the security and integrity of the account.
-4. 4. After all associated keys and action thresholds have been set to the desired multi-signature scheme, the weight of the original primary key can be increased or lowered, depending on your use case. Be careful with this, though. If you lower the primary key's weight below the key management threshold, the account will require multiple signatures for future key management. You must have enough associated keys set up. Otherwise, the account will be unusable.
+4. After all associated keys and action thresholds have been set to the desired multi-signature scheme, the weight of the original primary key can be increased or lowered, depending on your use case. Be careful with this, though. If you lower the primary key's weight below the key management threshold, the account will require multiple signatures for future key management. You must have enough associated keys set up. Otherwise, the account will be unusable.
 
 ## Step 6: Send a multi-signature deploy from the primary account
 
